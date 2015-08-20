@@ -5,6 +5,8 @@ package wordgame;
 */
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
  
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
@@ -32,6 +34,8 @@ public class SoundPlayer implements LineListener, Runnable{
      * this flag indicates whether the playback completes or not.
      */
     boolean playCompleted;
+    private Map<String,String> songList = new HashMap<>();
+    private Song currentSong;
      
     /**
      * Play a given audio file.
@@ -59,7 +63,7 @@ public SoundPlayer(String audioFilePath) {
     
     public void run()
 { 
-        String audioFilePath = "src/sound/theme.wav";
+        String audioFilePath = currentSong.getFile().getPath();
         SoundPlayer player = new SoundPlayer(audioFilePath);
         player.play(audioFilePath);
       

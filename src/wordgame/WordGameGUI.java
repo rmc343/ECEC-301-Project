@@ -1,5 +1,6 @@
 package wordgame;
 
+import java.io.FileNotFoundException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,13 +19,13 @@ public class WordGameGUI extends javax.swing.JFrame {
     /**
      * Creates new form WordGameGUI
      */
-    public WordGameGUI() {
+    public WordGameGUI() throws FileNotFoundException {
         initComponents();
         theGame = new WordGame();
         games = theGame.loadGames();
 
         for (Game game : games.values()) {
-            System.out.printf("\n %s Questions: " + game.getQuestions() + "\n Answers: " + game.getAnswers(), game.getName());
+            System.out.printf("\n\n %s Size: %d \n Questions: " + game.getQuestions() + "\n Answers: " + game.getAnswers(), game.getName(),game.getAnswers().size());
         }
     }
 
@@ -312,8 +313,9 @@ public class WordGameGUI extends javax.swing.JFrame {
             activeWord = question;
             challenge = activeWord.toUpperCase();
             answer = currentGame.getAnswerKey().get(activeWord).toString().toUpperCase();
+            
             wordTextField.setText(challenge); // Give user their first challenge. 
-            if (theGame.theme.equals("Permutation Count")) {
+            if (theGame.theme.equals(WordGame.PERMUTATION_COUNT)) {
                 hintTextField.setText("NA");
             } else {
                 hintTextField.setText(answer.substring(0, 2));
@@ -340,7 +342,7 @@ public class WordGameGUI extends javax.swing.JFrame {
                 answer = currentGame.getAnswerKey().get(activeWord).toString().toUpperCase();
                 wordTextField.setText(challenge); // Give user their next challenge. 
                 // Don't show a hint for the Permutation Counting Game!
-                if (theGame.theme.equals("Permutation Count")) {
+                if (theGame.theme.equals(WordGame.PERMUTATION_COUNT)) {
                     hintTextField.setText("NA");
                 } else {
                     hintTextField.setText(answer.substring(0, 2));
@@ -361,7 +363,11 @@ public class WordGameGUI extends javax.swing.JFrame {
                 challenge = activeWord.toUpperCase();
                 answer = currentGame.getAnswerKey().get(activeWord).toString().toUpperCase();
                 wordTextField.setText(challenge); // Give user their next challenge. 
-                hintTextField.setText(answer.substring(0, 2));
+                if (theGame.theme.equals(WordGame.PERMUTATION_COUNT)) {
+                    hintTextField.setText("NA");
+                } else {
+                    hintTextField.setText(answer.substring(0, 2));
+                }
                 userInputTextField.setText("");
             }// end of inner else block
 
@@ -431,6 +437,7 @@ public class WordGameGUI extends javax.swing.JFrame {
                     + " -50.\n\nGood luck! Press OK to start.");
             setTitle(currentGame.getName() + " Game");
             imageLabel.setIcon(currentGame.getIcon());
+            theGame.theme =  currentGame.getName();
 
         } else {
 
@@ -506,7 +513,11 @@ public class WordGameGUI extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new WordGameGUI().setVisible(true);
+                try {
+                    new WordGameGUI().setVisible(true);
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(WordGameGUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
 
