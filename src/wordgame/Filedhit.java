@@ -22,22 +22,25 @@ public class Filedhit {
      */
     public static void main(String args[]) throws FileNotFoundException            
     {
-        Scanner in = new Scanner(new File(WordGame.ANTONYM_PATH));
+        Scanner in = new Scanner(new File(WordGame.CAPITAL_CITY_PATH));
         PrintWriter out = new PrintWriter(new File("temp.txt"));
         while(in.hasNext())
         {
             String x = in.nextLine();
-            x = x.replaceAll("#a[0-9][0-9][0-9][0-9]", "");
+            System.out.println(x); 
+            System.out.println(0);
             out.println(x);
             
         }
         in.close();
         out.close();
         in = new Scanner(new File("temp.txt"));
-        out = new PrintWriter(new File(WordGame.ANTONYM_PATH));
+        out = new PrintWriter(new File(WordGame.CAPITAL_CITY_PATH));
         while(in.hasNext())
         {
             String x = in.nextLine();
+            System.out.println(x);
+            System.out.println(1);
             out.println(x);
             
         }

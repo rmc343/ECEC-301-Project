@@ -45,7 +45,7 @@ public class WordGame {
     public static final String ANTONYM_PATH = RESOURCE_PATH + "antonyms.txt";
     public static final String HOMONYM_PATH = RESOURCE_PATH + "homonyms.txt";
     public static final String SYNONYM_PATH = RESOURCE_PATH + "synotm.txt";
-    public static final String CAPITAL_CITY_PATH = RESOURCE_PATH + "capitalCities.txt";
+    public static final String CAPITAL_CITY_PATH = RESOURCE_PATH + "capital.txt";
     public static final String PERMUTATION_COUNT_PATH = RESOURCE_PATH + "wordlist.txt";
     public static final String SPANISH_PATH = RESOURCE_PATH + "antonyms.txt";
     public static final String FRENCH_PATH = RESOURCE_PATH + "antonyms.txt";
@@ -141,8 +141,9 @@ public class WordGame {
         map.put(ANTONYM,new Content(new File(ANTONYM_PATH),ANTONYM));
         map.put(SYNONYM,new Content(new File(SYNONYM_PATH),SYNONYM));
         map.put(PERMUTATION_COUNT,new Content(new File(PERMUTATION_COUNT_PATH),PERMUTATION_COUNT));
-        map.put(HOMONYM,new Content(new File(HOMONYM_PATH),HOMONYM));
         map.put(CAPITAL_CITY,new Content(new File(CAPITAL_CITY_PATH),CAPITAL_CITY));
+        map.put(HOMONYM,new Content(new File(HOMONYM_PATH),HOMONYM));
+        
         
         wordInit.setMap(map);
                

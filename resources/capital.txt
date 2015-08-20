@@ -198,4 +198,204 @@ Yamoussoukro	Cote d'Ivoire
 Yaounde	Cameroon
 Yerevan	Armenia
 No official capital	Nauru
+Zagreb	Croatia Dhabi	United Arab Emirates
+Abuja	Nigeria
+Accra	Ghana
+Addis Ababa	Ethiopia
+Algiers	Algeria
+Amman	Jordan
+Andorra la Vella	Andorra
+Ankara	Turkey
+Antananarivo	Madagascar
+Apia	Samoa
+Ashgabat	Turkmenistan
+Asmara	Eritrea
+Astana	Kazakhstan
+Asuncion	Paraguay
+Athens	Greece
+Baku	Azerbaijan
+Bandar Seri Begawan	Brunei
+Baghdad	Iraq
+Bamako	Mali
+Bangkok	Thailand
+Bangui	Central African Republic
+Banjul	Gambia
+Basseterre	Saint Kitts and Nevis
+Beijing	China
+Beirut	Lebanon
+Belgrade	Serbia
+Belmopan	Belize
+Belfast	Northern Ireland
+Berlin	Germany
+Bern	Switzerland
+Bishkek	Kyrgyzstan
+Bissau	Guinea-Bissau
+Bogota	Colombia
+Brasilia	Brazil
+Bratislava	Slovakia
+Brazzaville	Congo, Republic of the
+Bridgetown	Barbados
+Brussels	Belgium
+Budapest	Hungary
+Bucharest	Romania
+Buenos Aires	Argentina
+Bujumbura	Burundi
+Cairo	Egypt
+Canberra	Australia
+Caracas	Venezuela
+Cardiff	Wales
+Castries	Saint Lucia
+Cayenne	French Guiana
+Chisinau	Moldova
+Colombo	Sri Lanka
+Conakry	Guinea
+Copenhagen	Denmark
+Dakar	Senegal
+Damascus	Syria
+Dhaka	Bangladesh
+Dar es Salaam	Tanzania
+Dili	East Timor
+Djibouti	Djibouti
+Doha	Qatar
+Dublin	Ireland
+Dushanbe	Tajikistan
+Edinburgh	Scotland
+Freetown	Sierra Leone
+Gaborone	Botswana
+Georgetown	Guyana
+Guatemala City	Guatemala
+Hanoi	Vietnam
+Harare	Zimbabwe
+Havana	Cuba
+Helsinki	Finland
+Honiara	Solomon Islands
+Islamabad	Pakistan
+Jakarta	Indonesia
+Juba	South Sudan
+Kabul	Afghanistan
+Kathmandu	Nepal
+Kampala	Uganda
+Khartoum	Sudan
+Kiev	Ukraine
+Kigali	Rwanda
+Kingston	Jamaica
+Kingstown	Saint Vincent and the Grenadines
+Kinshasa	Congo, Democratic Republic of the
+Kuala Lumpur	Malaysia
+Kuwait City	Kuwait
+La Paz	Bolivia
+Libreville	Gabon
+Lilongwe	Malawi
+Lima	Peru
+Lisbon	Portugal
+Ljubljana	Slovenia
+Lome	Togo
+London	England
+London	United Kingdom
+Luanda	Angola
+Lusaka	Zambia
+Luxembourg	Luxembourg
+Madrid	Spain
+Majuro	Marshall Islands
+Malabo	Equatorial Guinea
+Male	Maldives
+Managua	Nicaragua
+Manama	Bahrain
+Manila	Philippines
+Maputo	Mozambique
+Maseru	Lesotho
+Mbabana	Swaziland
+Melekeok	Palau
+Mexico City	Mexico
+Minsk	Belarus
+Mogadishu	Somalia
+Monaco	Monaco
+Monrovia	Liberia
+Montevideo	Uruguay
+Moroni	Comoros
+Moscow	Russia
+Muscat	Oman
+Nairobi	Kenya
+Nassau	Bahamas
+N'Djamena	Chad
+New Delhi	India
+Niamey	Niger
+Nicosia	Cyprus
+Nouakchott	Mauritania
+Nuku'alofa	Tonga
+Ouagadougou	Burkina Faso
+Oslo	Norway
+Ottawa	Canada
+Palikir	Federated States of Micronesia
+Panama City	Panama
+Paramaribo	Suriname
+Paris	France
+Phnom Penh	Cambodia
+Podgorica	Montenegro
+Port au Prince	Haiti
+Port Louis	Mauritius
+Port Moresby	Papua New Guinea
+Port of Spain	Trinidad and Tobago
+Port Vila	Vanuatu
+Porto Novo	Benin
+Prague	Czech Republic
+Praia	Cape Verde
+Pretoria	South Africa
+Pristina	Kosovo
+Pyongyang	North Korea
+Quito	Ecuador
+Rabat	Morocco
+Rangoon (Yangon)	Myanmar (Burma)
+Reykjavik	Iceland
+Riga	Latvia
+Riyadh	Saudi Arabia
+Rome	Italy
+Roseau	Dominica
+Saint George's	Grenada
+Saint John's	Antigua and Barbuda
+San Jose	Costa Rica
+San Marino	San Marino
+San Salvador	El Salvador
+Sanaa	Yemen
+Santiago	Chile
+Santo Domingo	Dominican Republic
+Sao Tome	Sao Tome and Principe
+Sarajevo	Bosnia and Herzegovina
+Seoul	South Korea
+Singapore	Singapore
+Skopje	Macedonia
+Sofia	Bulgaria
+Stockholm	Sweden
+Suva	Fiji
+Taipei	Taiwan
+Tallinn	Estonia
+Tarawa Atoll	Kiribati
+Tashkent	Uzbekistan
+Tbilisi	Georgia
+Tegucigalpa	Honduras
+Tehran	Iran
+Tel Aviv*	Israel
+Amsterdam	Netherlands
+Thimphu	Bhutan
+Tirana (Tirane)	Albania
+Tokyo	Japan
+Tripoli	Libya
+Tunis	Tunisia
+Ulaanbaatar	Mongolia
+Vaduz	Liechtenstein
+Vaiaku village	Tuvalu
+Valletta	Malta
+Vatican City	Vatican City
+Victoria	Seychelles
+Vienna	Austria
+Vientiane	Laos
+Vilnius	Lithuania
+Warsaw	Poland
+Washington D.C.	United States
+Wellington	New Zealand
+Windhoek	Namibia
+Yamoussoukro	Cote d'Ivoire
+Yaounde	Cameroon
+Yerevan	Armenia
+No official capital	Nauru
 Zagreb	Croatia
