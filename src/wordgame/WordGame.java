@@ -36,6 +36,8 @@ public class WordGame {
     public static final String PERMUTATION_COUNT = "Permutation Count";
     public static final String SPANISH = "Spanish";
     public static final String FRENCH = "French";
+    public static final String PRESIDENTS = "Presidents";
+    public static final String STATES = "States";
     /*public static final String 
      public static final String
      public static final String*/
@@ -49,6 +51,8 @@ public class WordGame {
     public static final String PERMUTATION_COUNT_PATH = RESOURCE_PATH + "wordlist.txt";
     public static final String SPANISH_PATH = RESOURCE_PATH + "antonyms.txt";
     public static final String FRENCH_PATH = RESOURCE_PATH + "antonyms.txt";
+    public static final String PRESIDENTS_PATH = RESOURCE_PATH + "presidents.txt";
+    public static final String STATES_PATH = RESOURCE_PATH + "states.txt";
     
     //**************************************************************************
 
@@ -143,6 +147,8 @@ public class WordGame {
         map.put(PERMUTATION_COUNT,new Content(new File(PERMUTATION_COUNT_PATH),PERMUTATION_COUNT));
         map.put(CAPITAL_CITY,new Content(new File(CAPITAL_CITY_PATH),CAPITAL_CITY));
         map.put(HOMONYM,new Content(new File(HOMONYM_PATH),HOMONYM));
+        map.put(PRESIDENTS,new Content(new File(PRESIDENTS_PATH),PRESIDENTS));
+        map.put(STATES,new Content(new File(STATES_PATH),STATES));
         
         
         wordInit.setMap(map);
@@ -187,6 +193,22 @@ public class WordGame {
         questionAns = getQuestionAndAnswers(wordInit.parseContent(wordInit.getMap().get(PERMUTATION_COUNT)));
         
         game = new Game(PERMUTATION_COUNT, questionAns.get(Q), questionAns.get(A));
+        games.put(game.getName(), game);
+        //**********************************************************************
+        
+        //**************** PRESIDENTS GAME******************************
+        
+        questionAns = getQuestionAndAnswers(wordInit.parseContent(wordInit.getMap().get(PRESIDENTS)));
+        
+        game = new Game(PRESIDENTS, questionAns.get(Q), questionAns.get(A));
+        games.put(game.getName(), game);
+        //**********************************************************************
+        
+           //**************** STATES GAME******************************
+        
+        questionAns = getQuestionAndAnswers(wordInit.parseContent(wordInit.getMap().get(STATES)));
+        
+        game = new Game(STATES, questionAns.get(Q), questionAns.get(A));
         games.put(game.getName(), game);
         //**********************************************************************
         

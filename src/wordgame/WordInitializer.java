@@ -169,9 +169,52 @@ public class WordInitializer {
                          isAnswer = false; 
                      }else{
                          isAnswer = true;                                
-                     }
-                    
+                    }
+
                 }
+                break;
+                 case WordGame.PRESIDENTS:
+
+                System.out.println("PRESIDENTS:");
+                System.out.println("------------");
+
+                for (String line : content.getLines()) {
+
+                    String question = line;
+                    question = question.split(",")[0];
+                    
+                    System.out.println(question);
+
+                    String answer = line;
+                    answer = answer.split(",")[1];
+                    System.out.println(answer);
+                    System.out.println("------------");
+                    
+                    pairList.add(new Pair<String, String>(question, answer));
+                }
+
+                break;
+
+            case WordGame.STATES:
+
+                System.out.println("STATES:");
+                System.out.println("------------");
+
+                for (String line : content.getLines()) {
+
+                    String question = line;
+                    question = question.split(",")[0];
+                    
+                    System.out.println(question);
+
+                    String answer = line;
+                    answer = answer.split(",")[1];
+                    System.out.println(answer);
+                    System.out.println("------------");
+                    
+                    pairList.add(new Pair<String, String>(question, answer));
+                }
+
                 break;
             default:
                 break;
