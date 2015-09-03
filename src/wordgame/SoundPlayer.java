@@ -5,8 +5,6 @@ package wordgame;
 */
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
  
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
@@ -29,13 +27,18 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class SoundPlayer implements LineListener, Runnable{
   
+    public final static String SOUND_PATH = "src/sound/";
+    public final static String THEME_PATH =  SOUND_PATH + "theme.wav";
+    public final static String WRONG_PATH =  SOUND_PATH + "wrong.wav";
+    public final static String CORRECT_PATH =  SOUND_PATH + "correct.wav";
+    public final static String WIN_PATH =  SOUND_PATH + "win.wav";
+    
     
 /**
      * this flag indicates whether the playback completes or not.
      */
     boolean playCompleted;
-    private Map<String,String> songList = new HashMap<>();
-    private Song currentSong;
+    String path;
      
     /**
      * Play a given audio file.
@@ -43,8 +46,10 @@ public class SoundPlayer implements LineListener, Runnable{
      */
     
 // Constructor which will play a specified wav file. 
-public SoundPlayer(String audioFilePath) {
+
+public SoundPlayer(String audioFilePath){
     File audioFile = new File(audioFilePath);
+    path = audioFilePath;
     try {
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
             AudioFormat format = audioStream.getFormat();
@@ -55,19 +60,17 @@ public SoundPlayer(String audioFilePath) {
     }
     
     catch(Exception e) {}
-      
-}    
+}
   
-
-     
+    public void play(){
+    }
     
     public void run()
 { 
-        String audioFilePath = currentSong.getFile().getPath();
+        String audioFilePath = path;
         SoundPlayer player = new SoundPlayer(audioFilePath);
         player.play(audioFilePath);
       
-   
 } // end of run method
     
     
@@ -85,12 +88,13 @@ public SoundPlayer(String audioFilePath) {
  
             audioClip.addLineListener(this);
             
-            
             audioClip.open(audioStream);
-            
-            audioClip.loop(Clip.LOOP_CONTINUOUSLY);  // This will cause it to play forever!
+            String pathCompare = path;
 
-             
+            if (pathCompare.toLowerCase().contains("theme.wav")){
+                audioClip.loop(Clip.LOOP_CONTINUOUSLY);  // This will cause it to play forever!
+            }
+          
             audioClip.start();
              
             while (!playCompleted) {
@@ -132,12 +136,13 @@ public SoundPlayer(String audioFilePath) {
         } else if (type == LineEvent.Type.STOP) {
             playCompleted = true;
             System.out.println("Playback completed.");
+         
         }
  
     }
  
     public static void main(String[] args) {
-        String audioFilePath = "src/sound/theme.wav";
+        String audioFilePath = THEME_PATH;
         Runnable r = new SoundPlayer(audioFilePath);
         Thread t = new Thread(r);
         t.start() ;
@@ -147,3 +152,4 @@ public SoundPlayer(String audioFilePath) {
     }
  
 }
+

@@ -1,31 +1,96 @@
 package wordgame;
 
+import java.awt.Image;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.IIOException;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 
 public class WordGameGUI extends javax.swing.JFrame {
 
-// Instance variables
+    //*************WORD GAME VARIABLES*******************************************
     public WordGame theGame;
     public String activeWord;
-    public SoundPlayer r = new SoundPlayer("src/sound/theme.wav");  // Plays the indicated sound file 
-    public Thread musicThread = new Thread(r);// Dedicated thread to play the sound file. 
     public Map<String, Game> games = new HashMap<>();
     public Game currentGame;
     public boolean isFirstTurn = true;
 
+    
+    //*************SOUND PLAYERS**************************************************
+    public SoundPlayer r = new SoundPlayer(SoundPlayer.THEME_PATH);  // Plays the indicated sound file 
+    public SoundPlayer win = new SoundPlayer(SoundPlayer.WIN_PATH); 
+    public SoundPlayer wrong = new SoundPlayer(SoundPlayer.WRONG_PATH); 
+    public SoundPlayer correct = new SoundPlayer(SoundPlayer.CORRECT_PATH); 
+    public Thread musicThread = new Thread(r);// Dedicated thread to play the sound file. 
+    
+    //*************GAME MESSAGES****************************************
+    public static final String INSTRUCTIONS = "Earn 10 points for each correct answer\nLose 20 points for each wrong answer.\nWin with 100 points or loose with -50.\n\nGood luck! Press OK to start.";
+    public static final String CORRECT = "CORRECT!";
+    public static final String WRONG = "WRONG!";
+    public static final String BLANK = "";
+    public static final String NA = "NA";
+    
+    //*************KEY STROKES****************************************************
+    public static final String Q = "Q";
+    public static final String C= "C";
+    public static final String M = "M";
+    public static final String N = "N";
+    public static final String L = "L";
+    public static final String F = "F";
+    
     /**
      * Creates new form WordGameGUI
      */
-    public WordGameGUI() throws FileNotFoundException {
+    public WordGameGUI() throws FileNotFoundException, IOException {
         initComponents();
         theGame = new WordGame();
         games = theGame.loadGames();
 
         for (Game game : games.values()) {
-            System.out.printf("\n\n %s Size: %d \n Questions: " + game.getQuestions() + "\n Answers: " + game.getAnswers(), game.getName(),game.getAnswers().size());
+            jComboBox1.addItem(game.getName());
+            System.out.printf("\n\n %s Size: %d \n Questions: " + game.getQuestions() + "\n Answers: " + game.getAnswers(), game.getName(), game.getAnswers().size());
+        }
+    }
+    
+    public void setHintField(String answer){
+        if (theGame.theme.equals(WordGame.PERMUTATION_COUNT) || theGame.theme.equals(WordGame.ANIMALS)) {
+                hintTextField.setText(NA);
+            } else {
+                hintTextField.setText(answer.substring(0, 2));
+            }
+    }
+    
+    public void setChallengeField(String challenge){
+        if (theGame.theme.equals(WordGame.FLAG_GAME)) {
+                //ImageGame imageGame = (ImageGame)games.get(WordGame.FLAG_GAME);
+                ImageIcon icon = null;
+                try {
+                    icon = Game.convertToImage(activeWord);
+                } catch (IOException ex) {
+                    Logger.getLogger(WordGameGUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                imageLabel.setIcon(icon);
+                wordTextField.setText("ENTER STATE NAME BELOW!");
+            } else {
+                wordTextField.setText(challenge);
+            }
+        
+            //userInputTextField.setText(BLANK);
+            System.out.println("Test Word is: " + activeWord);
+            
+    }
+    
+    public String setFeedBackMessage(String status, String answer, String challenge) {
+        if (theGame.theme.equals(WordGame.FLAG_GAME)) {
+            return status + " The flag  is " + answer;
+        } else {
+            return status + " " + theGame.theme + "  for " + challenge + " is " + answer;
         }
     }
 
@@ -59,6 +124,8 @@ public class WordGameGUI extends javax.swing.JFrame {
         userInputTextField = new javax.swing.JTextField();
         hintButton = new javax.swing.JButton();
         musicButton = new javax.swing.JToggleButton();
+        label1 = new java.awt.Label();
+        keyTextField = new java.awt.TextField();
         jComboBox1 = new javax.swing.JComboBox();
         jLabel1 = new javax.swing.JLabel();
 
@@ -98,6 +165,11 @@ public class WordGameGUI extends javax.swing.JFrame {
         crystalCountTextField.setEditable(false);
         crystalCountTextField.setText("10");
         crystalCountTextField.setName("crystalsTextField"); // NOI18N
+        crystalCountTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                crystalCountTextFieldActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout topPanelLayout = new javax.swing.GroupLayout(topPanel);
         topPanel.setLayout(topPanelLayout);
@@ -114,7 +186,7 @@ public class WordGameGUI extends javax.swing.JFrame {
                         .addGap(64, 64, 64)
                         .addComponent(crystalCountLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(crystalCountTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(crystalCountTextField)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(scoreLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -127,7 +199,7 @@ public class WordGameGUI extends javax.swing.JFrame {
             .addGroup(topPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(topPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(imageLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(imageLabel)
                     .addGroup(topPanelLayout.createSequentialGroup()
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -136,9 +208,9 @@ public class WordGameGUI extends javax.swing.JFrame {
                             .addComponent(scoreLabel)
                             .addComponent(scoreTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(crystalCountLabel)
-                            .addComponent(crystalCountTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(crystalCountTextField))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(feedbackTextField)))
+                        .addComponent(feedbackTextField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
 
@@ -189,6 +261,19 @@ public class WordGameGUI extends javax.swing.JFrame {
             }
         });
 
+        label1.setText("KeyBoard");
+
+        keyTextField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                keyTextFieldFocusGained(evt);
+            }
+        });
+        keyTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                keyTextFieldKeyTyped(evt);
+            }
+        });
+
         javax.swing.GroupLayout bottomPanelLayout = new javax.swing.GroupLayout(bottomPanel);
         bottomPanel.setLayout(bottomPanelLayout);
         bottomPanelLayout.setHorizontalGroup(
@@ -198,26 +283,30 @@ public class WordGameGUI extends javax.swing.JFrame {
                 .addGroup(bottomPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(wordLabel)
                     .addComponent(userInputLabel)
-                    .addComponent(hintLabel))
+                    .addComponent(hintLabel)
+                    .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(bottomPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(wordTextField)
                     .addGroup(bottomPanelLayout.createSequentialGroup()
                         .addGroup(bottomPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(userInputTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(hintTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, bottomPanelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(musicButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(hintButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(exitButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(okButton)
-                .addGap(6, 6, 6))
+                            .addComponent(wordTextField)
+                            .addGroup(bottomPanelLayout.createSequentialGroup()
+                                .addGroup(bottomPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(userInputTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(hintTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addContainerGap())
+                    .addGroup(bottomPanelLayout.createSequentialGroup()
+                        .addComponent(keyTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(musicButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(hintButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(exitButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(okButton)
+                        .addGap(6, 6, 6))))
         );
         bottomPanelLayout.setVerticalGroup(
             bottomPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -235,15 +324,17 @@ public class WordGameGUI extends javax.swing.JFrame {
                     .addComponent(userInputLabel)
                     .addComponent(userInputTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(bottomPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(okButton)
-                    .addComponent(exitButton)
-                    .addComponent(hintButton)
-                    .addComponent(musicButton))
+                .addGroup(bottomPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(bottomPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(okButton)
+                        .addComponent(exitButton)
+                        .addComponent(hintButton)
+                        .addComponent(musicButton))
+                    .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(keyTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Antonym", "Synonym", "Homonym", "French", "Spanish", "Capital City", "Permutation Count", "Another", "More" }));
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox1ActionPerformed(evt);
@@ -256,7 +347,6 @@ public class WordGameGUI extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(topPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -264,6 +354,9 @@ public class WordGameGUI extends javax.swing.JFrame {
                     .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(bottomPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(topPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -291,128 +384,12 @@ public class WordGameGUI extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_scoreTextFieldActionPerformed
 
-    // The OK button
-    private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
-        // TODO add your handling code here:
-        // 1. Generate a random word Pair and extract the first and second words from that pair. 
-        
-        String question = currentGame.getRand().toString();
-        String challenge;  // Always presented as the challenge word. 
-        String answer;  // This is the answer for each question. 
-
-        String feedbackMessage = "";  // Response to player after answer is submitted. 
-
-        // 2. Check if this is the first turn. 
-        // If it is, choose a random challenge and display it in the field wordTextField. 
-        // There is no need to check any answer as the game has just started. 
-        String oldWord = wordTextField.getText();
-
-        if (isFirstTurn) {
-            
-            isFirstTurn = false;
-            activeWord = question;
-            challenge = activeWord.toUpperCase();
-            answer = currentGame.getAnswerKey().get(activeWord).toString().toUpperCase();
-            
-            wordTextField.setText(challenge); // Give user their first challenge. 
-            if (theGame.theme.equals(WordGame.PERMUTATION_COUNT)) {
-                hintTextField.setText("NA");
-            } else {
-                hintTextField.setText(answer.substring(0, 2));
-            }
-            userInputTextField.setText("");
-            System.out.println("Test Word is: " + activeWord);
-        } // 3. Check the user's answer. Update the score, and give a Feedback message. 
-        else {
-            // Get the user's answer. 
-            String userAnswer = userInputTextField.getText().toUpperCase();
-            challenge = activeWord.toUpperCase();
-            answer = currentGame.getAnswerKey().get(activeWord).toString().toUpperCase();
-// Answer is correct!
-            if (userAnswer.equals(answer)) {
-                theGame.score += 10;  // Add ten points. 
-                scoreTextField.setText("" + theGame.score);
-                feedbackMessage = "CORRECT! " + theGame.theme + " for " + challenge + " is " + answer;
-                feedbackTextField.setText(feedbackMessage);
-                System.out.println(feedbackMessage);
-
-                // Prepare for a new turn. 
-                activeWord = question; // Update the question.
-                challenge = activeWord.toUpperCase();
-                answer = currentGame.getAnswerKey().get(activeWord).toString().toUpperCase();
-                wordTextField.setText(challenge); // Give user their next challenge. 
-                // Don't show a hint for the Permutation Counting Game!
-                if (theGame.theme.equals(WordGame.PERMUTATION_COUNT)) {
-                    hintTextField.setText("NA");
-                } else {
-                    hintTextField.setText(answer.substring(0, 2));
-                }
-                userInputTextField.setText("");
-
-            } // Answer is wrong!
-            else {
-                System.out.println("You are wrong!");
-                theGame.score -= 20;  // Subtract points. 
-                scoreTextField.setText("" + theGame.score);
-                feedbackMessage = "WRONG! " + theGame.theme + "  for " + challenge + " is " + answer;
-                feedbackTextField.setText(feedbackMessage);
-                System.out.println(feedbackMessage);
-
-                // Prepare for a new turn. 
-                activeWord = question; // Update the question.
-                challenge = activeWord.toUpperCase();
-                answer = currentGame.getAnswerKey().get(activeWord).toString().toUpperCase();
-                wordTextField.setText(challenge); // Give user their next challenge. 
-                if (theGame.theme.equals(WordGame.PERMUTATION_COUNT)) {
-                    hintTextField.setText("NA");
-                } else {
-                    hintTextField.setText(answer.substring(0, 2));
-                }
-                userInputTextField.setText("");
-            }// end of inner else block
-
-// After processing the answer, right or wrong, test if the game is over.        
-            // a. Test if the player has lost.
-            if (theGame.score <= -50) {
-                feedbackMessage = "Game Over! That was Pathetic!";
-                feedbackTextField.setText(feedbackMessage);
-                okButton.setEnabled(false);
-                wordTextField.setText(""); // Blank it out 
-                hintTextField.setText("");
-                userInputTextField.setEnabled(false);
-            }
-
-            // b. Test if the player has won. 
-            if (theGame.score >= 100) {
-                feedbackMessage = "Awesome! You are a Genius!";
-                feedbackTextField.setText(feedbackMessage);
-                okButton.setEnabled(false);
-                wordTextField.setText(""); // Blank it out 
-                hintTextField.setText("");
-                userInputTextField.setEnabled(false);
-
-            }
-
-        } // end of outer else blobk
-
-
-    }//GEN-LAST:event_okButtonActionPerformed
-
-    private void wordTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_wordTextFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_wordTextFieldActionPerformed
-
-    private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
-        // TODO add your handling code here:
-        System.exit(0);
-    }//GEN-LAST:event_exitButtonActionPerformed
-
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         // TODO add your handling code here:
         // If a new question style is chosen, such as synonyms or homonyms, we need to update certain GUI fields. 
 
-       // Update the image with one of your choice (hunt on internet) for each question type. 
+        // Update the image with one of your choice (hunt on internet) for each question type. 
         // Update all fields that said Antonym to the appropriate term. 
         // Change the game to the new question type.  
         String jComboBoxChoice = jComboBox1.getSelectedItem().toString();
@@ -421,8 +398,8 @@ public class WordGameGUI extends javax.swing.JFrame {
         // If a new theme has been selected using the JComboBox, erase the previous unanswered question. 
         // * * * * * * * * * *  Still do do this here. 
         wordTextField.setText("Challenge word will appear here."); // Blank out previous unanswered question. 
-        hintTextField.setText("");
-        feedbackTextField.setText("");
+        hintTextField.setText(BLANK);
+        feedbackTextField.setText(BLANK);
 
         currentGame = games.get(jComboBoxChoice);
 
@@ -431,13 +408,10 @@ public class WordGameGUI extends javax.swing.JFrame {
             wordLabel.setText("Find the " + currentGame.getName().toLowerCase() + " for");
             System.out.println("You selected the new theme: " + jComboBoxChoice);
             userInputLabel.setText("Enter " + currentGame.getName().toLowerCase());
-            jTextArea2.setText("Find the " + currentGame.getName() + "!\n"
-                    + "Earn 10 points for each correct answer\nLose 20 points "
-                    + "for each wrong answer.\nWin with 100 points or loose with"
-                    + " -50.\n\nGood luck! Press OK to start.");
-            setTitle(currentGame.getName() + " Game");
-            imageLabel.setIcon(currentGame.getIcon());
-            theGame.theme =  currentGame.getName();
+            jTextArea2.setText(INSTRUCTIONS);
+            ImageIcon icon = currentGame.getIcon();
+            imageLabel.setIcon(icon);
+            theGame.theme = currentGame.getName();
 
         } else {
 
@@ -447,24 +421,11 @@ public class WordGameGUI extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
-    private void hintButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hintButtonActionPerformed
-        // TODO add your handling code here:
-        System.out.println("You pressed the Hint button. That will cost you 2 crystals.");
-        theGame.crystalCount -= 2;  // Subtract 2 from the crystal count. 
-        // Display the new crystal count. 
-
-        crystalCountTextField.setText("" + theGame.crystalCount);
-        String answer = currentGame.getAnswerKey().get(activeWord).toString();
-        hintTextField.setText(answer.substring(0, 3));  // Show the first three letters instead of just 2. 
-
-
-    }//GEN-LAST:event_hintButtonActionPerformed
-
     // This is a toggle button. WWe will use it to play or stop the music. 
     private void musicButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_musicButtonActionPerformed
         // TODO add your handling code here:
 
-        // Recall r is defined at the top as a SoundPlayer object. 
+        // Recall r is defined at the top as a SoundPlayer object.
         // and musicThread is defined above as:
         // Thread musicThread = new Thread(r); // Don't do this!!!
         if (musicButton.isSelected()) {
@@ -476,13 +437,208 @@ public class WordGameGUI extends javax.swing.JFrame {
         } else {
             System.out.println("Music file stopped.");
             musicButton.setText("Music");
-            musicThread.interrupt();  // When the interrupt is caught, the current thread is closed. 
+            musicThread.interrupt();  // When the interrupt is caught, the current thread is closed.
         }
-
-
     }//GEN-LAST:event_musicButtonActionPerformed
 
-    /**
+    private void hintButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hintButtonActionPerformed
+        // TODO add your handling code here:
+        System.out.println("You pressed the Hint button. That will cost you 2 crystals.");
+        theGame.crystalCount -= 2;  // Subtract 2 from the crystal count.
+        // Display the new crystal count.
+
+        crystalCountTextField.setText(BLANK + theGame.crystalCount);
+        String answer = currentGame.getAnswerKey().get(activeWord).toString();
+        hintTextField.setText(answer.substring(0, 3));  // Show the first three letters instead of just 2.
+    }//GEN-LAST:event_hintButtonActionPerformed
+
+    private void wordTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_wordTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_wordTextFieldActionPerformed
+
+    private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
+        // TODO add your handling code here:
+        System.exit(0);
+    }//GEN-LAST:event_exitButtonActionPerformed
+
+    // The OK button
+    private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
+        // TODO add your handling code here:
+        // 1. Generate a random word Pair and extract the first and second words from that pair.
+        boolean imageLoaded;
+        String question =  BLANK;
+        do{
+            if(currentGame.getQuestionStack().empty()){
+                try {
+                    currentGame.refresh();
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(WordGameGUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            question = currentGame.getRand().toString();
+        } while(!currentGame.getQuestionStack().contains(question));
+            
+        currentGame.getQuestionStack().remove(question);
+        System.out.append(question);
+        String challenge;  // Always presented as the challenge word.
+        String answer;  // This is the answer for each question.
+
+        String feedbackMessage = BLANK;  // Response to player after answer is submitted.
+
+        // 2. Check if this is the first turn.
+        // If it is, choose a random challenge and display it in the field wordTextField.
+        // There is no need to check any answer as the game has just started.
+        
+        if (theGame.theme.equals(WordGame.FLAG_GAME)) { setChallengeField(activeWord);}
+
+        if (isFirstTurn) {
+
+            isFirstTurn = false;
+            activeWord = question;
+            challenge = activeWord.toUpperCase();
+            answer = currentGame.getAnswerKey().get(activeWord).toString().toUpperCase();
+
+            // Give user their first challenge.
+            setHintField(answer);
+
+            setChallengeField(challenge);
+            System.out.println("ANSWER: " + answer);
+
+        } // 3. Check the user's answer. Update the score, and give a Feedback message.
+        else {
+            // Get the user's answer.
+            String userAnswer = userInputTextField.getText().toUpperCase();
+            challenge = activeWord.toUpperCase();
+            answer = currentGame.getAnswerKey().get(activeWord).toString().toUpperCase();
+            System.out.println("User Asnwer: " + userAnswer);
+            System.out.println("\nANSWER: " + answer);
+
+            // Answer is correct!---------------------------------------------------
+            if (userAnswer.equals(answer)) {
+
+                musicThread = new Thread(correct);
+                musicThread.start();
+
+                theGame.score += 10;  // Add ten points.
+                scoreTextField.setText(BLANK + theGame.score);
+                feedbackTextField.setText(setFeedBackMessage(CORRECT,answer,challenge));
+
+                System.out.println(feedbackMessage);
+
+                // Prepare for a new turn.
+                activeWord = question; // Update the question.
+                challenge = activeWord.toUpperCase();
+                answer = currentGame.getAnswerKey().get(activeWord).toString().toUpperCase();
+
+                // Don't show a hint for the Permutation Counting Game!
+                setHintField(answer);
+
+                setChallengeField(challenge);
+                
+                userInputTextField.setText(BLANK);
+                
+
+            } // Answer is wrong!-------------------------------------------------
+            else {
+
+                musicThread = new Thread(wrong);
+                musicThread.start();
+
+                System.out.println(WRONG);
+               
+
+                theGame.score -= 20;  // Subtract points.
+                scoreTextField.setText(BLANK + theGame.score);
+
+                feedbackTextField.setText(setFeedBackMessage(WRONG,answer,challenge));
+                System.out.println(feedbackMessage);
+
+                // Prepare for a new turn.
+                activeWord = question; // Update the question.
+                challenge = activeWord.toUpperCase();
+                answer = currentGame.getAnswerKey().get(activeWord).toString().toUpperCase();
+
+                setHintField(answer);
+
+                setChallengeField(challenge);
+
+                userInputTextField.setText(BLANK);
+
+            }// end of inner else block------------------------------------------
+
+            // After processing the answer, right or wrong, test if the game is over.
+            // a. Test if the player has lost.
+            if (theGame.score <= -50) {
+                feedbackMessage = "Game Over! That was Pathetic!";
+                feedbackTextField.setText(feedbackMessage);
+                okButton.setEnabled(false);
+                wordTextField.setText(BLANK); // Blank it out
+                hintTextField.setText(BLANK);
+                userInputTextField.setEnabled(false);
+            }
+
+            // b. Test if the player has won.
+            if (theGame.score >= 100) {
+
+                musicThread = new Thread(win);
+                musicThread.start();
+
+                feedbackMessage = "Awesome! You are a Genius!";
+                feedbackTextField.setText(feedbackMessage);
+                okButton.setEnabled(false);
+                wordTextField.setText(BLANK); // Blank it out
+                hintTextField.setText(BLANK);
+                userInputTextField.setEnabled(false);
+                imageLabel.setIcon(Game.resizeImage(WIDTH, HEIGHT,new ImageIcon(WordGame.WINNER_GIF_PATH)));
+
+            }
+
+        } // end of outer else blobk
+    }//GEN-LAST:event_okButtonActionPerformed
+
+    private void keyTextFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_keyTextFieldKeyTyped
+       // TODO add your handling code here:
+        String nextCharacter = Character.toString(evt.getKeyChar()); // Get the key that was pressed.
+        nextCharacter = nextCharacter.toUpperCase();
+        System.out.println("This key has been pressed: " + nextCharacter);
+        keyTextField.setText(""); // Clear each key after it is typed.
+        if(nextCharacter.equals(Q))
+        { System.out.println("OK, bye! "); System.exit(0); }
+        // Add other key responses here using else if blocks.
+        else if (nextCharacter.equals(N)) {
+            theGame.score = 90;
+            scoreTextField.setText(BLANK + theGame.score);
+        }
+        else if (nextCharacter.equals(L)) {
+            theGame.score = -40;
+            scoreTextField.setText(BLANK + theGame.score);
+        }
+        else if (nextCharacter.equals(M)) {
+            theGame.crystalCount = 500;
+            crystalCountTextField.setText(BLANK + theGame.crystalCount);
+        }
+        else if (nextCharacter.equals(C)) {
+            jTextArea2.setText(String.format("Come on, you can do it!\n") );
+        }
+        else if (nextCharacter.equals(F)) {
+            jTextArea2.setText(String.format("No more Cheats! That is enough!\n") );
+        }
+        else { System.out.printf("Sorry the key %s is not supported yet.\n", nextCharacter);
+        jTextArea2.setText(String.format("Sorry the %s key is not supported yet.\n", nextCharacter) );
+        }
+    }//GEN-LAST:event_keyTextFieldKeyTyped
+
+    private void keyTextFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_keyTextFieldFocusGained
+        // TODO add your handling code here:
+        System.out.println("Supported Keys\n1. Type Q to quit.\n2. Add more keys here.");
+        // Display a help message in the big text area at the top right!
+        jTextArea2.setText("Supported Keys\n1. Type Q to quit.\n2. Add more keys here."); 
+    }//GEN-LAST:event_keyTextFieldFocusGained
+
+    private void crystalCountTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_crystalCountTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_crystalCountTextFieldActionPerformed
+      /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
@@ -517,6 +673,8 @@ public class WordGameGUI extends javax.swing.JFrame {
                     new WordGameGUI().setVisible(true);
                 } catch (FileNotFoundException ex) {
                     Logger.getLogger(WordGameGUI.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(WordGameGUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         });
@@ -538,6 +696,8 @@ public class WordGameGUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea jTextArea2;
+    private java.awt.TextField keyTextField;
+    private java.awt.Label label1;
     private javax.swing.JToggleButton musicButton;
     private javax.swing.JButton okButton;
     private javax.swing.JLabel scoreLabel;

@@ -1,5 +1,6 @@
 package wordgame;
 
+import java.awt.Image;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.math.BigInteger;
@@ -26,7 +27,7 @@ public class WordInitializer {
     private Scanner scanner;
     private Random rg = new Random();
     private Map<String, Content> contentMap = new HashMap<>();
-
+    
     public WordInitializer() {
 
     }
@@ -97,22 +98,20 @@ public class WordInitializer {
                 break;
 
             case WordGame.CAPITAL_CITY:
-                  
-                 for (String word : content.getLines()) {
-                     
-                         String question = word.split("\t")[0];
-                         String answer = word.split("\t")[1];
-                         System.out.println("---------------------");
-                         System.out.println(question);
-                         System.out.println(answer);
-                         pairList.add(new Pair<String, String>(question, answer));
-                     
-                 }
+
+                for (String word : content.getLines()) {
+
+                    String question = word.split("\t")[0];
+                    String answer = word.split("\t")[1];
+                    System.out.println("---------------------");
+                    System.out.println(question);
+                    System.out.println(answer);
+                    pairList.add(new Pair<String, String>(question, answer));
+
+                }
                 break;
 
-            case WordGame.FRENCH:
-                break;
-
+            
             case WordGame.HOMONYM:
                 for (String word : content.getLines()) {
 
@@ -142,38 +141,37 @@ public class WordInitializer {
                 }
                 break;
 
-            case WordGame.SPANISH:
-                break;
+            
 
             case WordGame.SYNONYM:
-                 boolean isAnswer = false;
+                boolean isAnswer = false;
                 for (int i = 0; i < content.getLines().size(); i++) {
-                    
+
                     if (pairList.size() > 50) {
                         break;
                     }
-                    
-                     if (isAnswer) {
-                         String question = content.getLines().get(i);
-                         question = question.split(",")[0];
-                         question = question.replaceAll("[0-9]","");
-                         question = question.replace("\t","");
-                         question = question.replace(" ","");
-                         String answer = content.getLines().get(i+1);
-                         answer = answer.split(",")[0];
-                         answer = answer.replaceAll("[0-9]","");
-                         answer = answer.replace("\t","");
-                         answer = answer.replace(" ","");
-                         
-                         pairList.add(new Pair<String, String>(question, answer));
-                         isAnswer = false; 
-                     }else{
-                         isAnswer = true;                                
+
+                    if (isAnswer) {
+                        String question = content.getLines().get(i);
+                        question = question.split(",")[0];
+                        question = question.replaceAll("[0-9]", "");
+                        question = question.replace("\t", "");
+                        question = question.replace(" ", "");
+                        String answer = content.getLines().get(i + 1);
+                        answer = answer.split(",")[0];
+                        answer = answer.replaceAll("[0-9]", "");
+                        answer = answer.replace("\t", "");
+                        answer = answer.replace(" ", "");
+
+                        pairList.add(new Pair<String, String>(question, answer));
+                        isAnswer = false;
+                    } else {
+                        isAnswer = true;
                     }
 
                 }
                 break;
-                 case WordGame.PRESIDENTS:
+            case WordGame.PRESIDENTS:
 
                 System.out.println("PRESIDENTS:");
                 System.out.println("------------");
@@ -182,14 +180,14 @@ public class WordInitializer {
 
                     String question = line;
                     question = question.split(",")[0];
-                    
+
                     System.out.println(question);
 
                     String answer = line;
                     answer = answer.split(",")[1];
                     System.out.println(answer);
                     System.out.println("------------");
-                    
+
                     pairList.add(new Pair<String, String>(question, answer));
                 }
 
@@ -204,18 +202,79 @@ public class WordInitializer {
 
                     String question = line;
                     question = question.split(",")[0];
-                    
+
                     System.out.println(question);
 
                     String answer = line;
                     answer = answer.split(",")[1];
                     System.out.println(answer);
                     System.out.println("------------");
-                    
+
                     pairList.add(new Pair<String, String>(question, answer));
                 }
 
                 break;
+            case WordGame.ANIMALS:
+
+                System.out.println("ANIMALS:");
+                System.out.println("------------");
+
+                for (String line : content.getLines()) {
+
+                    if (line.length() > 3) {
+                        System.out.println(line);
+                        String question = line;
+
+                        System.out.println(question);
+
+                        String answer = line.substring(0, 3);
+                        //answer = answer.split("\t")[1];
+                        System.out.println(answer);
+                        System.out.println("------------");
+
+                        pairList.add(new Pair<String, String>(answer, question));
+                    }
+                }
+
+                break;
+
+            case WordGame.MATH:
+
+                System.out.println("MATH:");
+                System.out.println("------------");
+                for (int i = 0; i < 50; i++) {
+                    int num = rg.nextInt(21);
+                    int pow = rg.nextInt(11);
+                    int ans = (int) Math.pow(num, pow);
+                    String question = num + " raised to the power of " + pow;
+                    System.out.println(question);
+                    System.out.println(ans);
+                    System.out.println("------------");
+                    pairList.add(new Pair<String, String>(question, Integer.toString(ans)));
+                }
+
+                break;
+                
+                case WordGame.FLAG_GAME:
+                    
+                     System.out.println("STATES FLAGS:");
+                     System.out.println("------------");
+
+                for (String line : content.getLines()) {
+
+                    String state = line;
+                    state = state.split(",")[0];
+
+                    System.out.println(state);
+                    String str = "http://www.all-flags-world.com/usa-states/"+ state +"/Flag-of-"+ state +"-XL.jpg";
+                    System.out.println(str);
+                    
+                    System.out.println("------------");
+
+                    pairList.add(new Pair<String, String>(str, state));
+                }
+                
+                    break;
             default:
                 break;
         }
@@ -261,7 +320,7 @@ public class WordInitializer {
         for (int i = 1; i <= n; i++) {
             result *= i;
         }
-       //System.out.println("The factorial of "+ n +" is " + result);
+        //System.out.println("The factorial of "+ n +" is " + result);
 
         return result;
     }

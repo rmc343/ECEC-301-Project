@@ -3,9 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/rcunni202/Desktop/ECEC%20301/WordGame_Swing/src/wordgame/Game.java</file>
-            <file>file:/C:/Users/rcunni202/Desktop/ECEC%20301/WordGame_Swing/src/wordgame/WordGameGUI.java</file>
-            <file>file:/C:/Users/rcunni202/Desktop/ECEC%20301/WordGame_Swing/src/wordgame/WordGame.java</file>
+            <file>file:/C:/Users/rcunni202/Desktop/ECEC%20301/ECEC-301-Project/src/wordgame/WordInitializer.java</file>
+            <file>file:/C:/Users/rcunni202/Desktop/ECEC%20301/ECEC-301-Project/src/wordgame/Game.java</file>
+            <file>file:/C:/Users/rcunni202/Desktop/ECEC%20301/ECEC-301-Project/src/wordgame/WordGameGUI.java</file>
+            <file>file:/C:/Users/rcunni202/Desktop/ECEC%20301/ECEC-301-Project/src/wordgame/SoundPlayer.java</file>
+            <file>file:/C:/Users/rcunni202/Desktop/ECEC%20301/ECEC-301-Project/src/wordgame/WordGame.java</file>
         </group>
     </open-files>
 </project-private>

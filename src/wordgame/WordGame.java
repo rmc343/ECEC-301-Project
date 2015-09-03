@@ -1,8 +1,13 @@
 package wordgame;
 
+import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.math.BigInteger;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.List;
@@ -14,9 +19,12 @@ import java.util.HashMap;
 
 import java.util.Map;
 import java.util.TreeMap;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 
 
 public class WordGame {
+
 
 // A game has  a score and a collection of word pairs in a List to challenge the player. 
     public int score;
@@ -34,12 +42,12 @@ public class WordGame {
     public static final String SYNONYM = "Synonym";
     public static final String CAPITAL_CITY = "Capital City";
     public static final String PERMUTATION_COUNT = "Permutation Count";
-    public static final String SPANISH = "Spanish";
-    public static final String FRENCH = "French";
     public static final String PRESIDENTS = "Presidents";
     public static final String STATES = "States";
-    /*public static final String 
-     public static final String
+    public static final String ANIMALS = "Animals";
+    public static final String MATH = "Math";
+    public static final String FLAG_GAME = "Flag game";
+     /*public static final String
      public static final String*/
     
     // file paths
@@ -48,11 +56,26 @@ public class WordGame {
     public static final String HOMONYM_PATH = RESOURCE_PATH + "homonyms.txt";
     public static final String SYNONYM_PATH = RESOURCE_PATH + "synotm.txt";
     public static final String CAPITAL_CITY_PATH = RESOURCE_PATH + "capital.txt";
-    public static final String PERMUTATION_COUNT_PATH = RESOURCE_PATH + "wordlist.txt";
-    public static final String SPANISH_PATH = RESOURCE_PATH + "antonyms.txt";
-    public static final String FRENCH_PATH = RESOURCE_PATH + "antonyms.txt";
+    public static final String PERMUTATION_COUNT_PATH = RESOURCE_PATH + "wordlist.txt";  
     public static final String PRESIDENTS_PATH = RESOURCE_PATH + "presidents.txt";
     public static final String STATES_PATH = RESOURCE_PATH + "states.txt";
+    public static final String ANIMALS_PATH = RESOURCE_PATH + "a.txt";
+    public static final String MATH_PATH = RESOURCE_PATH + "a.txt";
+    public static final String FLAG_GAME_PATH = STATES_PATH;
+        
+     //game icons
+    public static final String IMAGE_PATH = RESOURCE_PATH + "images/";
+    public static final String ANTONYM_IMAGE_PATH= IMAGE_PATH + "antonym.jpg";
+    public static final String HOMONYM_IMAGE_PATH = IMAGE_PATH + "homonym.jpg";
+    public static final String SYNONYM_IMAGE_PATH = IMAGE_PATH + "synonym.jpeg";
+    public static final String CAPITAL_CITY_IMAGE_PATH = IMAGE_PATH + "capital.jpg";
+    public static final String PERMUTATION_COUNT_IMAGE_PATH = IMAGE_PATH + "permutation.png";  
+    public static final String PRESIDENTS_IMAGE_PATH = IMAGE_PATH + "presidents.jpg";
+    public static final String STATES_IMAGE_PATH = IMAGE_PATH + "state.jpg";
+    public static final String ANIMALS_IMAGE_PATH = IMAGE_PATH + "animals.jpg";
+    public static final String MATH_IMAGE_PATH = IMAGE_PATH + "math.png";
+    public static final String FLAG_GAME_IMAGE_PATH = IMAGE_PATH + "flags.jpg";
+    public static final String WINNER_GIF_PATH = IMAGE_PATH + "winner.gif";
     
     //**************************************************************************
 
@@ -63,7 +86,7 @@ public class WordGame {
      * Additional word lists might teach French, German or Spanish. 
      */
 // * * * CONSTRUCTORS * * * 
-    public WordGame() throws FileNotFoundException {
+    public WordGame() throws FileNotFoundException, IOException {
         score = 0;
         theme = "Antonym";
         //listOfWordPairs = loadAntonyms();
@@ -134,7 +157,7 @@ public class WordGame {
     
        
 
-    public static HashMap<String,Game> loadGames() throws FileNotFoundException {
+    public static HashMap<String,Game> loadGames() throws FileNotFoundException, IOException {
         
         HashMap<String, Game> games = new HashMap<>();
         HashMap<String, ArrayList<String>> questionAns = new HashMap<>();
@@ -149,7 +172,9 @@ public class WordGame {
         map.put(HOMONYM,new Content(new File(HOMONYM_PATH),HOMONYM));
         map.put(PRESIDENTS,new Content(new File(PRESIDENTS_PATH),PRESIDENTS));
         map.put(STATES,new Content(new File(STATES_PATH),STATES));
-        
+        map.put(ANIMALS,new Content(new File(ANIMALS_PATH),ANIMALS));
+        map.put(MATH,new Content(new File(MATH_PATH),MATH));
+        map.put(FLAG_GAME,new Content(new File(FLAG_GAME_PATH),FLAG_GAME));
         
         wordInit.setMap(map);
                
@@ -157,7 +182,7 @@ public class WordGame {
         
         questionAns = getQuestionAndAnswers(wordInit.parseContent(wordInit.getMap().get(ANTONYM)));
 
-        Game game = new Game(ANTONYM, questionAns.get(Q), questionAns.get(A));
+        Game game = new Game(ANTONYM, questionAns.get(Q), questionAns.get(A),ANTONYM_IMAGE_PATH);
         games.put(game.getName(), game);
         //**********************************************************************
 
@@ -165,7 +190,7 @@ public class WordGame {
         
         questionAns = getQuestionAndAnswers(wordInit.parseContent(wordInit.getMap().get(HOMONYM)));
         
-        game = new Game(HOMONYM, questionAns.get(Q), questionAns.get(A));
+        game = new Game(HOMONYM, questionAns.get(Q), questionAns.get(A),HOMONYM_IMAGE_PATH);
         games.put(game.getName(), game);
         
         //**********************************************************************
@@ -174,7 +199,7 @@ public class WordGame {
         
         questionAns = getQuestionAndAnswers(wordInit.parseContent(wordInit.getMap().get(SYNONYM)));
         
-        game = new Game(SYNONYM, questionAns.get(Q), questionAns.get(A));
+        game = new Game(SYNONYM, questionAns.get(Q), questionAns.get(A),SYNONYM_IMAGE_PATH);
         games.put(game.getName(), game);
         
         //**********************************************************************
@@ -184,7 +209,7 @@ public class WordGame {
         
         questionAns = getQuestionAndAnswers(wordInit.parseContent(wordInit.getMap().get(CAPITAL_CITY)));
         
-        game = new Game(CAPITAL_CITY, questionAns.get(Q), questionAns.get(A));
+        game = new Game(CAPITAL_CITY, questionAns.get(Q), questionAns.get(A),CAPITAL_CITY_IMAGE_PATH);
         games.put(game.getName(), game);
         //**********************************************************************
         
@@ -192,7 +217,7 @@ public class WordGame {
         
         questionAns = getQuestionAndAnswers(wordInit.parseContent(wordInit.getMap().get(PERMUTATION_COUNT)));
         
-        game = new Game(PERMUTATION_COUNT, questionAns.get(Q), questionAns.get(A));
+        game = new Game(PERMUTATION_COUNT, questionAns.get(Q), questionAns.get(A),PERMUTATION_COUNT_IMAGE_PATH);
         games.put(game.getName(), game);
         //**********************************************************************
         
@@ -200,18 +225,42 @@ public class WordGame {
         
         questionAns = getQuestionAndAnswers(wordInit.parseContent(wordInit.getMap().get(PRESIDENTS)));
         
-        game = new Game(PRESIDENTS, questionAns.get(Q), questionAns.get(A));
+        game = new Game(PRESIDENTS, questionAns.get(Q), questionAns.get(A),PRESIDENTS_IMAGE_PATH);
         games.put(game.getName(), game);
         //**********************************************************************
         
-           //**************** STATES GAME******************************
+        //**************** STATES GAME******************************
         
         questionAns = getQuestionAndAnswers(wordInit.parseContent(wordInit.getMap().get(STATES)));
         
-        game = new Game(STATES, questionAns.get(Q), questionAns.get(A));
+        game = new Game(STATES, questionAns.get(Q), questionAns.get(A),STATES_IMAGE_PATH);
         games.put(game.getName(), game);
         //**********************************************************************
         
+                       
+        //**************** ANIMALS GAME******************************
+        
+        questionAns = getQuestionAndAnswers(wordInit.parseContent(wordInit.getMap().get(ANIMALS)));
+        
+        game = new Game(ANIMALS, questionAns.get(Q), questionAns.get(A),ANIMALS_IMAGE_PATH);
+        games.put(game.getName(), game);
+        //**********************************************************************
+        
+        //**************** MATH GAME******************************
+        
+        questionAns = getQuestionAndAnswers(wordInit.parseContent(wordInit.getMap().get(MATH)));
+        
+        game = new Game(MATH, questionAns.get(Q), questionAns.get(A),MATH_IMAGE_PATH);
+        games.put(game.getName(), game);
+        //**********************************************************************  
+        
+        //**************** FLAG GAME******************************        
+        
+        questionAns = getQuestionAndAnswers(wordInit.parseContent(wordInit.getMap().get(FLAG_GAME)));
+        
+        game = new Game(FLAG_GAME, questionAns.get(Q), questionAns.get(A),FLAG_GAME_IMAGE_PATH);
+        games.put(game.getName(), game);
+        //**********************************************************************
         return games;
     }
 
@@ -231,5 +280,6 @@ public class WordGame {
 
         return map;
     }
+
 
 } // end of class
